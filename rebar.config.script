@@ -52,7 +52,11 @@ maps:to_list(lists:foldl(
     end,
     maps:from_list(CONFIG),
     [
-        {port_env,  [{"solaris", "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETREUID" ++ X64},
+        {port_env,  [{"CC",  CXX},
+                     {"CXX", CXX},
+                     {"CXXFLAGS", "$CXXFLAGS -DHAVE_PTRACE -O" ++ OptimLevel},
+
+                     {"solaris", "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETREUID" ++ X64},
                      {"solaris", "LDFLAGS",  "$LDFLAGS -lrt" ++ X64},
 
                      {"darwin",  "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETREUID" ++ X64},
@@ -64,12 +68,13 @@ maps:to_list(lists:foldl(
                      {"dragonfly",   "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETRESUID" ++ X64},
                      {"dragonfly",   "LDFLAGS",  "$LDFLAGS" ++ X64},
 
-                     {"linux",   "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETRESUID" ++ LinCXX},
-                     {"linux",   "LDFLAGS",  "$LDFLAGS" ++ LinLD},
+                     {"openbsd",   "CC", "eg++"},
+                     {"openbsd",   "CXX", "eg++"},
+                     {"openbsd",   "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETRESUID" ++ X64},
+                     {"openbsd",   "LDFLAGS",  "$LDFLAGS" ++ X64},
 
-                     {"CC",  CXX},
-                     {"CXX", CXX},
-                     {"CXXFLAGS", "$CXXFLAGS -DHAVE_PTRACE -O" ++ OptimLevel}
+                     {"linux",   "CXXFLAGS", "$CXXFLAGS -std=c++11 -DHAVE_SETRESUID" ++ LinCXX},
+                     {"linux",   "LDFLAGS",  "$LDFLAGS" ++ LinLD}
                     ]},
 
         {port_specs,[{filename:join(["priv", Mach, "exec-port"]), ["c_src/*.cpp"]}]},
